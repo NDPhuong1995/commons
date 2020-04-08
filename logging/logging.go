@@ -29,13 +29,17 @@ const (
 	FATAL
 )
 
-func SetUp(dir *string) {
-	if dir == nil {
+func SetUp(folder *string) {
+	dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	if folder == nil {
 		logger = log.New(os.Stderr, DefaultPrefix, log.LstdFlags)
 	} else {
 		fileName := fmt.Sprintf("%s%s.%s", "logging", time.Now().Format("20060102"), "log")
 
-		F, err := filesystem.MustOpenFile(fileName, *dir + fileName)
+		F, err := filesystem.MustOpenFile(fileName, dir + *folder + fileName)
 		if err != nil {
 			log.Fatalf("logging.Setup err: %v", err)
 		}
